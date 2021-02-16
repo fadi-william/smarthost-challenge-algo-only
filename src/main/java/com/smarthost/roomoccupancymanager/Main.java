@@ -30,8 +30,18 @@ import com.smarthost.roomoccupancymanager.service.RoomOccupancyManagerService;
 
 import java.util.List;
 
+/**
+ * The Main class.
+ *
+ * @author Fadi William
+ */
 public class Main {
 
+    /**
+     * The entry point of application.
+     *
+     * @param args the input arguments
+     */
     public static void main(String[] args) {
         // The first test.
         List<CustomerRequest> customerRequests = CustomerRequestSeed.getCustomerRequestSeed1();
@@ -78,6 +88,12 @@ public class Main {
         System.out.println("*******************");
     }
 
+    /**
+     * Print test results.
+     *
+     * @param hotelOccupancy             the hotel occupancy
+     * @param hotelOccupancyUsageResults the hotel occupancy usage results
+     */
     public static void printTestResults(HotelOccupancy hotelOccupancy, List<HotelOccupancyUsageResult> hotelOccupancyUsageResults) {
 
         HotelOccupancyUsageResult hotelOccupancyUsageResultPremium = hotelOccupancyUsageResults.get(0);

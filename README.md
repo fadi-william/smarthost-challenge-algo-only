@@ -1,6 +1,6 @@
 # Room occupancy Manager - Algorithm Only Project
 
-The role of this sample project is to be build a room occupancy manager algorithm for SmartHost based on their requirements.
+The goal of this sample project is to be build a room occupancy manager algorithm for SmartHost based on their requirements.
 
 ## Some screenshots of the project
 

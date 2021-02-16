@@ -48,22 +48,22 @@ public class RoomOccupancyManagerService {
         List<HotelOccupancyUsageResult> hotelOccupancyUsageResults = new ArrayList<>();
 
         // Filter the customers willing to pay less than 100 and sort them.
-        List<CustomerRequest> customersWillingToPayLessThan100Euros = customerRequests
+        List<CustomerRequest> cRsForCustomersWillingToPayLessThan100Euros = customerRequests
                 .stream()
                 .filter(c -> c.getAmountCustomerWillingToPay().compareTo(new BigDecimal(100)) < 0)
                 .sorted(Comparator.comparing(CustomerRequest::getAmountCustomerWillingToPay).reversed())
                 .collect(Collectors.toList());
 
         // Filter the customers willing to pay more than 100 and sort them.
-        List<CustomerRequest> customersWillingToPayMoreThanOrEqual100Euros = customerRequests
+        List<CustomerRequest> cRsForCustomersWillingToPayMoreThanOrEqual100Euros = customerRequests
                 .stream()
                 .filter(c -> c.getAmountCustomerWillingToPay().compareTo(new BigDecimal(100)) >= 0)
                 .sorted(Comparator.comparing(CustomerRequest::getAmountCustomerWillingToPay).reversed())
                 .collect(Collectors.toList());
 
         // We will work with the deque data structure for both entries.
-        Deque<CustomerRequest> customersWillingToPayLessThan100EurosDeque = new ArrayDeque<>(customersWillingToPayLessThan100Euros);
-        Deque<CustomerRequest> customersWillingToPayMoreThan100EurosDeque = new ArrayDeque<>(customersWillingToPayMoreThanOrEqual100Euros);
+        Deque<CustomerRequest> cRsForCustomersWillingToPayLessThan100EurosDeque = new ArrayDeque<>(cRsForCustomersWillingToPayLessThan100Euros);
+        Deque<CustomerRequest> cRsForCustomersWillingToPayMoreThan100EurosDeque = new ArrayDeque<>(cRsForCustomersWillingToPayMoreThanOrEqual100Euros);
 
         int numberOfEconomyRooms = hotelOccupancy.getNumberOfEconomyRooms();
         int numberOfPremiumRooms = hotelOccupancy.getNumberOfPremiumRooms();
@@ -75,8 +75,8 @@ public class RoomOccupancyManagerService {
         while(numberOfPremiumRooms > 0) {
 
             // Fill first the premium rooms with the customers willing to pay more than 100 euros.
-            if (!customersWillingToPayMoreThan100EurosDeque.isEmpty()) {
-                CustomerRequest customerRequest = customersWillingToPayMoreThan100EurosDeque.pop();
+            if (!cRsForCustomersWillingToPayMoreThan100EurosDeque.isEmpty()) {
+                CustomerRequest customerRequest = cRsForCustomersWillingToPayMoreThan100EurosDeque.pop();
                 premiumHotelOccupancyUsageResult.incrementNumberOfRoomsReservedBy1();
                 premiumHotelOccupancyUsageResult.addRoomReservationCostToTheBudget(customerRequest.getAmountCustomerWillingToPay());
                 numberOfPremiumRooms -= 1;
@@ -91,9 +91,9 @@ public class RoomOccupancyManagerService {
 
         // Then, fill the economy rooms with the customers willing to pay less than.
         while (numberOfEconomyRooms > 0) {
-            if (!customersWillingToPayLessThan100EurosDeque.isEmpty()) {
+            if (!cRsForCustomersWillingToPayLessThan100EurosDeque.isEmpty()) {
                 // Of course, we won't force the customers to pay more than 100 euros for non premium rooms.
-                CustomerRequest customerRequest = customersWillingToPayLessThan100EurosDeque.pop();
+                CustomerRequest customerRequest = cRsForCustomersWillingToPayLessThan100EurosDeque.pop();
                 economyHotelOccupancyUsageResult.incrementNumberOfRoomsReservedBy1();
                 economyHotelOccupancyUsageResult.addRoomReservationCostToTheBudget(customerRequest.getAmountCustomerWillingToPay());
 
@@ -127,8 +127,8 @@ public class RoomOccupancyManagerService {
 
         // Fill again the reset of the empty economy rooms as there's a possibility that some customer requests were upgraded.
         while (numberOfEconomyRooms > 0) {
-            if (!customersWillingToPayLessThan100EurosDeque.isEmpty()) {
-                CustomerRequest customerRequest = customersWillingToPayLessThan100EurosDeque.pop();
+            if (!cRsForCustomersWillingToPayLessThan100EurosDeque.isEmpty()) {
+                CustomerRequest customerRequest = cRsForCustomersWillingToPayLessThan100EurosDeque.pop();
                 economyHotelOccupancyUsageResult.incrementNumberOfRoomsReservedBy1();
                 economyHotelOccupancyUsageResult.addRoomReservationCostToTheBudget(customerRequest.getAmountCustomerWillingToPay());
                 numberOfEconomyRooms -= 1;
@@ -141,8 +141,8 @@ public class RoomOccupancyManagerService {
         // In case, it's not upgradable and there are some remaining rooms. Assign them to the remaining customers willing to pay less than
         // 100 euros.
         while (numberOfPremiumRooms > 0) {
-            if (!customersWillingToPayLessThan100EurosDeque.isEmpty()) {
-                CustomerRequest customerRequest = customersWillingToPayLessThan100EurosDeque.pop();
+            if (!cRsForCustomersWillingToPayLessThan100EurosDeque.isEmpty()) {
+                CustomerRequest customerRequest = cRsForCustomersWillingToPayLessThan100EurosDeque.pop();
                 premiumHotelOccupancyUsageResult.incrementNumberOfRoomsReservedBy1();
                 premiumHotelOccupancyUsageResult.addRoomReservationCostToTheBudget(customerRequest.getAmountCustomerWillingToPay());
                 numberOfPremiumRooms -= 1;

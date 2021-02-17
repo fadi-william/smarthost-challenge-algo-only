@@ -47,14 +47,14 @@ public class RoomOccupancyManagerService {
     public static List<HotelOccupancyUsageResult> run(List<CustomerRequest> customerRequests, HotelOccupancy hotelOccupancy, Boolean upgradable) {
         List<HotelOccupancyUsageResult> hotelOccupancyUsageResults = new ArrayList<>();
 
-        // Filter the customers willing to pay less than 100 and sort them.
+        // Filter by the customers willing to pay less than 100 and sort them.
         List<CustomerRequest> cRsForCustomersWillingToPayLessThan100Euros = customerRequests
                 .stream()
                 .filter(c -> c.getAmountCustomerWillingToPay().compareTo(new BigDecimal(100)) < 0)
                 .sorted(Comparator.comparing(CustomerRequest::getAmountCustomerWillingToPay).reversed())
                 .collect(Collectors.toList());
 
-        // Filter the customers willing to pay more than 100 and sort them.
+        // Filter by the customers willing to pay more than 100 and sort them.
         List<CustomerRequest> cRsForCustomersWillingToPayMoreThanOrEqual100Euros = customerRequests
                 .stream()
                 .filter(c -> c.getAmountCustomerWillingToPay().compareTo(new BigDecimal(100)) >= 0)
